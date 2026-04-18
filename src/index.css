@@ -1,0 +1,952 @@
+/* --- RESET & VARIABLES --- */
+:root {
+    --primary: #002b5b;   /* Navy Blue (Brand Color) */
+    --accent: #d4af37;    /* Gold (Brand Accent) */
+    --secondary: #f4f9ff; /* Light Background */
+    --text: #333;
+    --white: #fff;
+    --shadow: 0 4px 10px rgba(0,0,0,0.08);
+    --radius: 8px;
+    --transition: all 0.3s ease;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: var(--secondary);
+    color: var(--text);
+}
+
+a { text-decoration: none; color: inherit; }
+ul { list-style: none; }
+img { max-width: 100%; display: block; }
+button { cursor: pointer; }
+
+/* --- HEADER --- */
+.header {
+    background: var(--white);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    padding: 10px 0;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+.flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.desktop{
+    display: flex;
+}
+.tablet{
+    display: none;
+
+}
+
+/* Logo */
+.logo img {
+    height: 100px;
+    width: auto;
+    object-fit: contain;
+    transition: var(--transition);
+    margin-top: -10px;
+    margin-bottom: -15px;
+    margin-left: -10px;
+}
+.logo img:hover {
+    transform: scale(1.05);
+}
+
+/* Mobile par chota hi rahega kyunke media query niche hai */
+@media (max-width: 768px) {
+    .desktop{
+        display: none;
+    }
+    .tablet{
+        display: flex;
+    }
+    .logo img {
+        height: 80px; /* Mobile k liye behtar size */
+
+    }
+}
+/* --- FIXED & SEQUENCED SIDEBAR STYLING --- */
+.mobile-sidebar-menu {
+    position: fixed;
+    top: 0; left: -300px;
+    width: 280px;
+    height: 100vh;
+    background: #ffffff;
+    z-index: 9999;
+    transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+    box-shadow: 5px 0 25px rgba(0,0,0,0.15);
+}
+
+.mobile-sidebar-menu.active { left: 0; }
+
+/* Header - Bilkul Top Par */
+.sidebar-header {
+    background: rgb(197, 197, 197);
+    padding: 25px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0; /* Header size fix rahega */
+}
+.sidebar-header img { height: 70px; margin-left: -10px; margin-top: -170px; margin-bottom: -170px;}
+#close-menu { color: #000000; font-size: 28px; cursor: pointer; }
+
+/* Body - Links ki Tarteeb yahan set hai */
+.sidebar-body { 
+    flex: 1; 
+    overflow-y: auto; 
+    padding: 10px 0; /* Links ke top/bottom thori jaga */
+}
+
+.nav-list { 
+    list-style: none; 
+    padding: 0; 
+    margin: 0; 
+    display: flex;
+    flex-direction: column; /* Aik ke neechay aik links */
+}
+
+/* Common Style for All Row Items (Home, Shop, Category, Contact) */
+.nav-list li a, 
+.accordion-header {
+    display: flex;
+    align-items: center;
+    padding: 18px 25px; /* Inka size bilkul aik jaisa rakha hai */
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--primary) !important;
+    text-decoration: none;
+    border-bottom: 1px solid #f0f0f0; /* Har item ke neechay saaf line */
+    background: transparent;
+    transition: 0.3s ease;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Icons ki alignment aik jaisi */
+.nav-list li a i, 
+.accordion-header i:first-child {
+    margin-right: 15px;
+    color: var(--accent); /* Gold color */
+    width: 25px; /* Fixed width taake text aik hi line se shuru ho */
+    font-size: 18px;
+    text-align: center;
+}
+
+/* Arrow Icon for Category */
+.arrow-icon {
+    margin-left: auto; /* Arrow ko bilkul right side pe push kr dega */
+    font-size: 12px;
+    color: #bbb;
+    transition: 0.3s;
+}
+
+/* Submenu (Jo Top Category ke andar khulta hai) */
+.submenu {
+    background: #fcfcfc;
+    max-height: 0;
+    overflow: hidden;
+    transition: 0.4s ease-out;
+    padding: 0;
+    list-style: none;
+}
+.submenu.open { 
+    max-height: 300px; 
+    border-bottom: 1px solid #f0f0f0; 
+}
+
+.submenu li a {
+    padding: 12px 25px 12px 65px !important; /* Thora andar ko hat ke (Sequence) */
+    font-size: 14px;
+    font-weight: 500;
+    color: #555 !important;
+    border-bottom: none; /* Sub-links ke neechay line nahi hogi */
+}
+
+/* Developer Footer - Bilkul Bottom Par */
+.sidebar-footer-dev {
+    padding: 20px;
+    background: #f8f8f8;
+    text-align: center;
+    border-top: 1px solid #eee;
+    flex-shrink: 0;
+}
+.sidebar-footer-dev p { font-size: 11px; color: #888; margin-bottom: 10px; letter-spacing: 1px; }
+.sidebar-footer-dev p span { color: var(--primary); font-weight: bold; }
+
+.dev-socials a {
+    display: inline-block;
+    margin: 0 8px;
+    font-size: 18px;
+    color: #fff;
+    width: 35px;
+    height: 35px;
+    line-height: 35px;
+    border-radius: 50%;
+    transition: 0.3s;
+}
+.dev-socials a:first-child { background: #E1306C; } /* Insta */
+.dev-socials a:last-child { background: #25D366; } /* WhatsApp */
+/* Search Bar */
+.search-bar {
+    flex: 1;
+    max-width: 500px;
+    margin: 0 20px;
+}
+
+.search-inner {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background: #f1f1f1;
+    border-radius: 50px;
+    padding: 5px 15px;
+    border: 1px solid #ddd;
+}
+
+.search-inner input {
+    border: none;
+    background: transparent;
+    width: 100%;
+    padding: 8px;
+    outline: none;
+}
+
+/* Search Suggestions Box Styling */
+.search-inner {
+    position: relative; /* Zaroori hai taake box iske neeche aye */
+}
+
+#suggestions-box {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-top: none;
+    z-index: 1000;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    display: none; /* By default chupa rahega */
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.suggestion-item {
+    padding: 10px;
+    cursor: pointer;
+    border-bottom: 1px solid #eee;
+    color: #333;
+    text-align: left;
+}
+
+.suggestion-item:hover {
+    background-color: #f0f0f0;
+}
+/* Icons */
+.icons {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.icon-p { position: relative; cursor: pointer; }
+
+.counter {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: #e63946;
+    color: white;
+    font-size: 11px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+}
+
+/* --- BANNER & MARQUEE --- */
+.slider img {
+    width: 100%;
+    max-height: 450px;
+    object-fit: cover;
+}
+/* --- CIRCULAR MARQUEE STYLING --- */
+.quick-picks {
+    background: #fff;
+    padding: 25px 0;
+    overflow: hidden;
+    border-bottom: 1px solid #eee;
+}
+
+.marquee-wrapper {
+    width: 100%;
+    cursor: grab;
+    overflow-x: auto; /* Manual scroll for mobile/touch */
+    scrollbar-width: none; /* Hide scrollbar for Firefox */
+}
+
+.marquee-wrapper::-webkit-scrollbar {
+    display: none; /* Hide scrollbar for Chrome/Safari */
+}
+
+.marquee-content {
+    display: flex;
+    gap: 30px;
+    width: max-content;
+    animation: marquee-scroll 25s linear infinite; /* Slow continuous move */
+}
+
+/* Jab mouse upar ho tu ruk jaye (taake click asaan ho) */
+.marquee-content:hover {
+    animation-play-state: paused;
+}
+
+.circle-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    min-width: 100px;
+}
+
+.circle-img {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid var(--accent); /* Gold Border */
+    background: #f9f9f9;
+    transition: 0.3s;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.circle-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    padding: 5px;
+}
+
+.circle-item span {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--primary);
+}
+
+.circle-item:hover .circle-img {
+    transform: scale(1.1);
+    border-color: var(--primary);
+}
+
+/* Continuous Scroll Animation */
+@keyframes marquee-scroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+@media (max-width: 768px) {
+    .circle-img { width: 100px; height: 100px; }
+    .marquee-content { gap: 20px; }
+}
+
+.product-marquee {
+    background: var(--primary);
+    padding: 10px 0;
+    overflow: hidden;
+    white-space: nowrap;
+    margin-top: 20px;
+}
+
+.product-track {
+    display: flex;
+    gap: 30px;
+    animation: scroll 20s linear infinite;
+}
+
+.marquee-item {
+    background: white;
+    border-radius: 50px;
+    padding: 5px 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 200px;
+}
+
+.marquee-item img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+@keyframes scroll {
+    0% { transform: translateX(100%); }
+    100% { transform: translateX(-100%); }
+}
+
+/* --- CATEGORIES --- */
+.collections { margin: 40px auto; }
+.Heading-cat h1 {
+    text-align: center;
+    color: var(--primary);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 20px;
+}
+
+.collections-inner {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.collection {
+    position: relative;
+    border-radius: var(--radius);
+    overflow: hidden;
+    height: 360px;
+    box-shadow: var(--shadow);
+}
+
+.collection img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: var(--transition);
+}
+
+.collection:hover img { transform: scale(1.1); }
+
+.collection .content {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.collection button {
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-weight: bold;
+}
+
+/* --- PRODUCT GRID (Professional & Fixed) --- */
+.products h2 {
+    text-align: center;
+    color: var(--primary);
+    margin: 40px 0 20px;
+    text-transform: uppercase;
+}
+
+.products-inner {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 on Desktop */
+    gap: 20px;
+    
+}
+
+.product {
+    background: var(--white);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+    border: 1px solid #eee;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.product:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+.p-images {
+    height: 200px; /* Fixed height */
+    width: 100%;
+    padding: 15px;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.p-images img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain; /* IMAGE WILL NOT CUT */
+}
+
+/* Badges */
+
+
+.p-content {
+    padding: 15px;
+    text-align: center;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.p-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 5px;
+}
+
+.p-price {
+    color: var(--primary);
+    font-weight: bold;
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+}
+
+.add-to-cart {
+    background: var(--primary);
+    color: white;
+    border: none;
+    width: 100%;
+    padding: 10px;
+    border-radius: var(--radius);
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.add-to-cart:hover {
+    background: var(--accent);
+    color: var(--primary);
+}
+
+/* --- SIDEBAR CART --- */
+.cart-sidebar {
+    position: fixed;
+    top: 0; right: -100%;
+    width: 350px;
+    height: 100vh;
+    background: white;
+    z-index: 2000;
+    box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+    transition: 0.4s ease;
+    display: flex;
+    flex-direction: column;
+}
+.cart-sidebar.open { right: 0; }
+
+.cart-header {
+    background: var(--primary);
+    color: white;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.cart-items { flex: 1; overflow-y: auto; padding: 10px; }
+.cart-footer { padding: 15px; border-top: 1px solid #ddd; }
+
+.cart-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #f1f1f1;
+    padding-bottom: 10px;
+}
+.cart-item img { width: 50px; height: 50px; object-fit: cover; border-radius: 5px; }
+
+
+/* image-with-content container */
+/* Thumbnails ko pyara banane ke liye */
+.b-thumb {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%; /* Circle shape as your main image */
+  border: 2px solid #ddd;
+  cursor: pointer;
+  object-fit: cover;
+  transition: 0.3s ease;
+  background: #fff;
+}
+
+.b-thumb:hover {
+  transform: scale(1.1);
+  border-color: #002b5b;
+}
+
+.b-thumb.active {
+  border-color: #002b5b; /* Navy Blue border */
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.single-product-box {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 40px;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  background: #f2f2f2;
+  border-radius: 12px;
+}
+
+.single-product-image img {
+  width: 350px;
+  border-radius: 50%;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+}
+
+.single-product-details {
+  max-width: 450px;
+}
+
+.single-product-details .product-title {
+  font-size: 26px;
+  color: #2c3e50;
+  margin-bottom: 12px;
+}
+
+.product-description {
+  color: #555;
+  font-size: 15px;
+  margin-bottom: 18px;
+}
+
+.product-price {
+  font-size: 18px;
+  color: #2c3e50;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.product-qty-wrapper {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.product-qty-wrapper button {
+  width: 36px;
+  height: 36px;
+  font-size: 20px;
+  background: #ddd;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.product-qty-wrapper input {
+  width: 50px;
+  text-align: center;
+  margin: 0 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+/* footer */
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.footer {
+  background: linear-gradient(to top, #002147, #1e2a4f);
+  color: white;
+  padding: 50px 20px 30px;
+}
+
+.footer-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.footer-col {
+  flex: 1 1 200px;
+  margin: 20px;
+}
+.footer-loggo{
+  height: 120px;
+  margin-top: -120px;
+  padding-top: -30px;
+margin-right: 30px;
+  margin-left: -30px ;
+}
+.footer-col h3 {
+  margin-bottom: 15px;
+  font-weight: bold;
+}
+
+.footer-col p,
+.footer-col a {
+  color: white;
+  text-decoration: none;
+  display: block;
+  margin: 6px 0;
+  font-size: 15px;
+}
+
+.social-icons a {
+  display: inline-block;
+  margin-right: 10px;
+  background-color: #fff;
+  border-radius: 50%;
+  padding: 10px;
+  color: #002147;
+  font-size: 18px;
+}
+/* --- DEVELOPER FOOTER STYLING --- */
+.powered-by-dev {
+    text-align: center;
+    border-top: 1px solid rgba(255, 255, 255, 0.1); /* Halka sa divider */
+    padding-top: 25px;
+    margin-top: 20px;
+}
+
+.powered-by-dev p {
+    font-size: 13px;
+    color: #bbb;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+}
+
+.powered-by-dev p span {
+    color: var(--accent); /* Gold Color */
+    font-weight: bold;
+}
+
+.dev-icons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.dev-icons a {
+    width: 38px;
+    height: 38px;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 18px;
+    transition: 0.3s ease;
+    text-decoration: none;
+}
+
+/* Instagram Hover */
+.dev-icons a:first-child:hover {
+    background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2397, #833ab4);
+    transform: translateY(-3px);
+}
+
+/* WhatsApp Hover */
+.dev-icons a:last-child:hover {
+    background: #25D366;
+    transform: translateY(-3px);
+}
+.footer-bottom {
+    background: var(--accent);
+    color: var(--primary);
+    text-align: center;
+    padding: 10px;
+    font-weight: bold;
+}
+
+/* --- FLOATING BUTTONS STYLING --- */
+.floating-container {
+    position: fixed;
+    bottom: 30px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    z-index: 9999;
+}
+
+.float-btn {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 24px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+/* Scroll to Top Color (Branded Navy) */
+.top-btn {
+    background-color: var(--primary);
+    opacity: 0; /* Shuru mein chupa hoga */
+    visibility: hidden;
+    transform: translateY(20px);
+}
+
+.top-btn.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+/* WhatsApp Color (Green) */
+.wa-btn {
+    background-color: #25D366;
+}
+
+/* Hover Effects */
+.float-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.3);
+}
+
+.wa-btn:hover {
+    background-color: #20ba5a;
+}
+
+@media (max-width: 768px) {
+    .floating-container {
+        bottom: 20px;
+        right: 15px;
+    }
+    .float-btn {
+        width: 45px;
+        height: 45px;
+        font-size: 20px;
+    }
+}
+
+/* --- RESPONSIVE MEDIA QUERIES (Important) --- */
+
+/* Tablet */
+@media (max-width: 992px) {
+    .products-inner { grid-template-columns: repeat(3, 1fr); }
+    .collections-inner { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    /* Header Changes */
+    .desktop { display: none; } /* Hide heavy desktop header */
+    .tablet { display: flex; } /* Show mobile header */
+    .search-bar { display: none; }
+    
+    /* Grid System - 2 Items per row */
+    .products-inner {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+
+    .collections-inner { grid-template-columns: 1fr; }
+
+    /* Product Card Mobile Adjustments */
+    .p-images { height: 140px; padding: 5px; }
+    .p-content { padding: 10px; }
+    .p-title { font-size: 0.9rem; margin-bottom: 2px; }
+    .p-price { font-size: 1rem; margin-bottom: 5px; }
+    .add-to-cart { font-size: 12px; padding: 8px; }
+
+    /* Sidebar adjustments */
+    .cart-sidebar { width: 85%; }
+}
+
+/* --- PREMIUM ANIMATIONS --- */
+
+/* 1. Scroll Reveal State (Shuru mein chupa hoga) */
+.reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 2. Active State (Jab scroll karke samne aaye) */
+.reveal.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* 3. Product Hover Effect */
+.product {
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease !important;
+}
+
+.product:hover {
+    transform: translateY(-10px) scale(1.02) !important;
+    box-shadow: 0 15px 30px rgba(0,0,0,0.15) !important;
+}
+
+/* 4. Button Pulse Animation */
+.add-to-cart {
+    position: relative;
+    overflow: hidden;
+}
+
+.add-to-cart:active {
+    transform: scale(0.95);
+}
+
+/* 5. Circular Item Hover */
+.circle-item:hover .circle-img {
+    transform: rotate(5deg) scale(1.1);
+    box-shadow: 0 8px 20px rgba(212, 175, 55, 0.3);
+}
+
+/* 6. Logo Subtle Float */
+.logo img {
+    animation: floating 3s ease-in-out infinite;
+}
+
+@keyframes floating {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-5px); }
+    100% { transform: translateY(0px); }
+}
+
+/* 7. Image Loading Fade */
+img {
+    animation: fadeIn 1.5s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
