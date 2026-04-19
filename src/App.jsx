@@ -1,9 +1,26 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import Layout from './components/Layout';
-import { getProducts } from './services/api';
+import { allProducts } from './products';
 import './index.css';
 
-// ── Marquee items (static — sirf images hain) ─────────────────────────────────
+const rideOnProducts = [
+  { id:'dolphin-car',  ...allProducts['dolphin-car'] },
+  { id:'sky-jet',      ...allProducts['sky-jet'] },
+  { id:'mini-cooper',  ...allProducts['mini-cooper'] },
+  { id:'mini-junior',  ...allProducts['mini-junior'] },
+  { id:'range-rider',  ...allProducts['range-rider'] },
+  { id:'mini-racer',   ...allProducts['mini-racer'] },
+];
+
+const babyProducts = [
+  { id:'cosmos-cot',     ...allProducts['cosmos-cot'] },
+  { id:'jumbo-cot',      ...allProducts['jumbo-cot'] },
+  { id:'musical-walker', ...allProducts['musical-walker'] },
+  { id:'Baby-Walker',    ...allProducts['Baby-Walker'] },
+  { id:'potty-chair',    ...allProducts['potty-chair'] },
+  { id:'car-potty',      ...allProducts['car-potty'] },
+];
+
 const marqueeItems = [
   { id:'dolphin-car',  img:'images/dolphin.jpg',                      label:'Dolphin Ride' },
   { id:'sky-jet',      img:'images/jet2.jpg',                         label:'Sky Jet Auto Car' },
@@ -13,15 +30,14 @@ const marqueeItems = [
   { id:'potty-chair',  img:'images/3in 1 potty.jpeg',                 label:'3in1 Potty' },
 ];
 
-// ── Product Card ──────────────────────────────────────────────────────────────
-function ProductCard({ slug, name, price, image }) {
+function ProductCard({ id, name, price, image }) {
   function handleAdd(e) {
     e.preventDefault();
     if (window.__addToCart) window.__addToCart(name, price, image);
   }
   return (
     <div className="product">
-      <a href={`/product?id=${slug}`} style={{display:'block',color:'inherit',textDecoration:'none'}}>
+      <a href={`/product?id=${id}`} style={{display:'block',color:'inherit',textDecoration:'none'}}>
         <div className="p-images">
           <img src={image} alt={name} onError={e=>e.target.style.opacity=0.2}/>
         </div>
@@ -37,7 +53,6 @@ function ProductCard({ slug, name, price, image }) {
   );
 }
 
-// ── Turbo Bike Featured Section ───────────────────────────────────────────────
 function TurboBikeSection() {
   function handleAdd() {
     if (window.__addToCart) window.__addToCart('Turbo Ride-On Bike', 4350, 'images/imagezayan.png');
@@ -82,65 +97,21 @@ function TurboBikeSection() {
   );
 }
 
-// ── Skeleton Loader ───────────────────────────────────────────────────────────
-function SkeletonCard() {
-  return (
-    <div className="product" style={{opacity:0.5}}>
-      <div style={{background:'#eee',height:180,borderRadius:8,marginBottom:10}}/>
-      <div style={{background:'#eee',height:16,borderRadius:4,marginBottom:8,width:'80%'}}/>
-      <div style={{background:'#eee',height:14,borderRadius:4,width:'50%'}}/>
-    </div>
-  );
-}
-
-// ── Main App ──────────────────────────────────────────────────────────────────
 export default function App() {
-  const [rideOnProducts, setRideOnProducts] = useState([]);
-  const [babyProducts,   setBabyProducts]   = useState([]);
-  const [loading,        setLoading]        = useState(true);
-
-  useEffect(() => {
-    async function fetchProducts() {
-      try {
-        const [rideonRes, babyRes] = await Promise.all([
-          getProducts('rideon'),
-          getProducts('baby'),
-        ]);
-
-        if (rideonRes.success) {
-          // Sirf 6 products — same as before
-          setRideOnProducts(rideonRes.data.slice(0, 6));
-        }
-        if (babyRes.success) {
-          setBabyProducts(babyRes.data);
-        }
-      } catch (err) {
-        console.error('API error:', err);
-      } finally {
-        setLoading(false); 
-      }
-    }
-    fetchProducts();
-  }, []);
-
-  // Scroll reveal
   useEffect(() => {
     const obs = new IntersectionObserver(entries => {
       entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('active'); });
     }, { threshold: 0.1 });
     document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
     return () => obs.disconnect();
-  }, [loading]);
+  }, []);
 
   return (
     <Layout>
-
-      {/* ── MAIN BANNER ── */}
       <div className="slider">
         <img src="images/Crown Banner.png" alt="Main Banner" style={{width:'100%'}}/>
       </div>
 
-      {/* ── CIRCULAR MARQUEE ── */}
       <section className="quick-picks">
         <div className="marquee-wrapper" id="marquee-container">
           <div className="marquee-content" id="marquee-content">
@@ -154,7 +125,6 @@ export default function App() {
         </div>
       </section>
 
-      {/* ── COLLECTIONS ── */}
       <section className="collections container reveal">
         <div className="Heading-cat"><h1>Explore Categories</h1></div>
         <div className="collections-inner">
@@ -173,35 +143,21 @@ export default function App() {
         </div>
       </section>
 
-      {/* ── RIDE ON TOYS ── */}
       <section className="products container reveal" id="products">
         <h2>CHILDREN'S RIDE-ON-TOYS</h2>
         <div className="products-inner">
-          {loading
-            ? Array(6).fill(0).map((_, i) => <SkeletonCard key={i}/>)
-            : rideOnProducts.map(p => (
-                <ProductCard key={p.id} slug={p.slug} name={p.name} price={p.price} image={p.image}/>
-              ))
-          }
+          {rideOnProducts.map(p => <ProductCard key={p.id} {...p}/>)}
         </div>
       </section>
 
-      {/* ── BABY ESSENTIALS ── */}
       <section className="products container reveal">
         <h2>BABY CARE ESSENTIALS</h2>
         <div className="products-inner">
-          {loading
-            ? Array(6).fill(0).map((_, i) => <SkeletonCard key={i}/>)
-            : babyProducts.map(p => (
-                <ProductCard key={p.id} slug={p.slug} name={p.name} price={p.price} image={p.image}/>
-              ))
-          }
+          {babyProducts.map(p => <ProductCard key={p.id} {...p}/>)}
         </div>
       </section>
 
-      {/* ── TURBO BIKE FEATURED ── */}
       <TurboBikeSection />
-
     </Layout>
   );
 }
